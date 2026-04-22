@@ -1,121 +1,145 @@
 const API_KEY = 'ce8cc57d5a729929765f42f9ebcfbc1c';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_URL = 'https://image.tmdb.org/t/p/w500';
-// TMDB OAuth 2.0 flow for login
-const LOGIN_URL = 'https://www.themoviedb.org/authenticate/';
-const CALLBACK_URL = 'http://localhost/callback'; // Replace with your deployed callback URL
+let currentPage = 1;
 
-function login() {
-  window.location.href = `${LOGIN_URL}${API_KEY}`;
-}
-
-function handleAuthCallback() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const requestToken = urlParams.get('request_token');
-
-  if (requestToken) {
-    // Exchange request token for session
-    $.ajax({
-      url: `${BASE_URL}/authentication/session/new`,
-      method: 'POST',
-      data: { api_key: API_KEY, request_token: requestToken },
-      success: function (data) {
-        localStorage.setItem('session_id', data.session_id);
-        alert('Logged in successfully!');
-      }
-    });
-  }
-}
-// Check if the user is logged in
-if (localStorage.getItem('session_id')) {
-  $('#login-btn').text('Logout').on('click', function () {
-    localStorage.removeItem('session_id');
-    alert('Logged out');
-    location.reload();
+// Fetch genres for the filter
+function fetchGenres() {
+  $.ajax({
+    url: `${BASE_URL}/genre/movie/list?api_key=${API_KEY}`,
+    method: 'GET',
+    success: function (data) {
+      const genres = data.genres;
+      genres.forEach((genre) => {
+        $('#genre-filter').append(`<option value="${genre.id}">${genre.name}</option>`);
+      });
+    }
   });
 }
-// Add movie to favorites
-function addToFavorites(movie) {
-  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  favorites.push(movie);
-  localStorage.setItem('favorites', JSON.stringify(favorites));
-}
 
-// Remove movie from favorites
-function removeFromFavorites(movieId) {
-  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-  favorites = favorites.filter((movie) => movie.id !== movieId);
-  localStorage.setItem('favorites', JSON.stringify(favorites));
-}
-$(document).ready(function () {
-  // Function to fetch data from TMDB API
-  function fetchMovies(endpoint) {
-    return $.ajax({
-      url: `${BASE_URL}${endpoint}&api_key=${API_KEY}`,
-      method: 'GET',
-      dataType: 'json'
-    });
-  }
-function showLoadingIndicator() {
-  $('#movie-list').html('<p>Loading...</p>');
-}
+// Fetch movies based on search query
+function fetchMovies(query = '', genre = '') {
+  const endpoint = query 
+    ? `/search/movie?query=${query}&page=${currentPage}` 
+    : `/discover/movie?page=${currentPage}&with_genres=${genre}`;
 
-function handleError(error) {
-  $('#movie-list').html('<p>Something went wrong. Please try again later.</p>');
-}
-
-// Example usage with AJAX
-function fetchMovies(endpoint) {
-  showLoadingIndicator();
   $.ajax({
     url: `${BASE_URL}${endpoint}&api_key=${API_KEY}`,
     method: 'GET',
-    dataType: 'json',
     success: function (data) {
-      // Handle successful data fetching
+      renderMovies(data.results);
+      renderPagination(data.total_pages); // Render pagination based on total pages
     },
-    error: function (error) {
-      handleError(error);
+    error: function () {
+      $('#movie-list').html('<p>Error loading movies!</p>');
     }
   });
 }
-  // Load Banner Image
-  function loadBanner() {
-    fetchMovies('/trending/movie/day').done((data) => {
-      const randomMovie = data.results[Math.floor(Math.random() * data.results.length)];
-      $('#banner').css('background-image', `url(${IMAGE_URL}${randomMovie.backdrop_path})`);
-    });
+
+// Render the movie list dynamically
+function renderMovies(movies) {
+  const movieListElement = $('#movie-list');
+  movieListElement.empty();
+
+  movies.forEach((movie) => {
+    const movieItem = $(`
+      <div class="movie-item">
+        <img src="${IMAGE_URL}${movie.poster_path}" alt="${movie.title}">
+        <h3>${movie.title}</h3>
+        <button onclick="viewDetails(${movie.id})">Details</button>
+      </div>
+    `);
+    movieListElement.append(movieItem);
+  });
+}
+
+// Render Pagination
+function renderPagination(totalPages) {
+  const paginationContainer = $('#pagination');
+  paginationContainer.empty();
+  for (let i = 1; i <= totalPages; i++) {
+    const pageButton = `<button onclick="changePage(${i})">${i}</button>`;
+    paginationContainer.append(pageButton);
   }
+}
 
-  // Load Movie List
-  function loadMovieList() {
-    fetchMovies('/trending/movie/week').done((data) => {
-      const movieListElement = $('#movie-list');
-      movieListElement.empty(); // Clear existing movies
+// Change Page
+function changePage(pageNumber) {
+  currentPage = pageNumber;
+  fetchMovies($('#search-bar').val(), $('#genre-filter').val());
+}
 
+// Fetch popular movies
+function fetchPopularMovies() {
+  $.ajax({
+    url: `${BASE_URL}/movie/popular?api_key=${API_KEY}`,
+    method: 'GET',
+    success: function (data) {
+      const movieListElement = $('#popular-movie-list');
+      movieListElement.empty();
+      
       data.results.forEach((movie) => {
-        const movieItem = $('<div>').addClass('movie-item').html(`
-          <img src="${IMAGE_URL}${movie.poster_path}" alt="${movie.title}">
+        const movieItem = $(`
+          <div class="movie-item">
+            <img src="${IMAGE_URL}${movie.poster_path}" alt="${movie.title}">
+            <h3>${movie.title}</h3>
+          </div>
         `);
         movieListElement.append(movieItem);
       });
-    });
-  }
-
-  // Handle Navigation for different sections
-  $('nav a').on('click', function (e) {
-    e.preventDefault();
-    const section = $(this).text().toLowerCase();
-    if (section === 'home') {
-      loadBanner();
-      loadMovieList();
-    } else {
-      // Placeholder for future sections
-      $('#movie-list').html('<p>Coming soon...</p>');
     }
   });
+}
 
-  // Initialize the app
-  loadBanner();
-  loadMovieList();
+// View Details of a Movie
+function viewDetails(movieId) {
+  $.ajax({
+    url: `${BASE_URL}/movie/${movieId}?api_key=${API_KEY}`,
+    method: 'GET',
+    success: function (data) {
+      const detailsContainer = $('#movie-details');
+      detailsContainer.empty();
+
+      const movieDetails = `
+        <h2>${data.title}</h2>
+        <img src="${IMAGE_URL}${data.poster_path}" alt="${data.title}">
+        <p><strong>Overview:</strong> ${data.overview}</p>
+        <p><strong>Release Date:</strong> ${data.release_date}</p>
+        <p><strong>Rating:</strong> ${data.vote_average}</p>
+        <h3>Cast:</h3>
+        <ul>
+          ${data.cast.map((actor) => `<li>${actor.name}</li>`).join('')}
+        </ul>
+      `;
+      detailsContainer.html(movieDetails);
+    }
+  });
+}
+
+// Add movie to localStorage Favorites
+function addToFavorites(movie) {
+  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  if (!favorites.some((fav) => fav.id === movie.id)) {
+    favorites.push(movie);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }
+}
+
+// Search Input Event
+$('#search-bar').on('input', function () {
+  const query = $(this).val();
+  fetchMovies(query);
+});
+
+// Genre Filter Event
+$('#genre-filter').on('change', function () {
+  const genre = $(this).val();
+  fetchMovies('', genre);
+});
+
+// Initialize
+$(document).ready(function () {
+  fetchGenres(); // Populate genre filter dropdown
+  fetchMovies();  // Fetch movies when the app loads
+  fetchPopularMovies();  // Fetch popular movies
 });
