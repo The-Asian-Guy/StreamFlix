@@ -3,29 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>StramFlix</title>
+  <title>StreamFlix</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Add jQuery CDN -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <button id="login-btn" onclick="login()">Login</button>
-  <!-- Add to Favorites button -->
-<button onclick="addToFavorites(movie)">Add to Favorites</button>
   <header>
     <h1>StreamFlix</h1>
     <nav>
       <ul>
         <li><a href="#">Home</a></li>
-        <li><a href="#">Trending</a></li>
         <li><a href="#">Popular</a></li>
+        <li><a href="#">Search</a></li>
       </ul>
     </nav>
+    <input type="text" id="search-bar" placeholder="Search Movies...">
+    <select id="genre-filter">
+      <option value="">Select Genre</option>
+    </select>
   </header>
 
-  <main id="movie-container">
-    <section id="banner"></section>
-    <section id="movie-list"></section>
+  <main>
+    <section id="movie-container">
+      <section id="banner"></section>
+      <section id="movie-list"></section>
+      <section id="popular-content">
+        <h2>Popular Movies</h2>
+        <div id="popular-movie-list"></div>
+      </section>
+      <section id="movie-details"></section>
+      <section id="pagination"></section>
+    </section>
   </main>
 
   <footer>
