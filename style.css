@@ -39,6 +39,20 @@ nav ul li a {
   font-size: 1.2rem;
 }
 
+#search-bar {
+  padding: 10px;
+  width: 300px;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+#genre-filter {
+  padding: 10px;
+  width: 250px;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
 #movie-container {
   padding: 20px;
 }
@@ -70,9 +84,38 @@ nav ul li a {
   object-fit: cover;
 }
 
+#popular-content, #movie-details {
+  margin-top: 30px;
+}
+
+#pagination {
+  margin-top: 30px;
+  text-align: center;
+}
+
 footer {
   text-align: center;
   margin-top: 50px;
   background-color: #141414;
   padding: 10px;
+}
+
+@media (max-width: 768px) {
+  #movie-list {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .movie-item img {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  #movie-list {
+    grid-template-columns: 1fr;
+  }
+
+  .movie-item img {
+    max-height: 200px;
+  }
 }
