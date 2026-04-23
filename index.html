@@ -10,12 +10,6 @@
 <body>
   <header>
     <h1>StreamFlix</h1>
-    <nav>
-      <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Popular</a></li>
-      </ul>
-    </nav>
     <div class="filters">
       <input type="text" id="search-bar" placeholder="Search Movies">
       <select id="genre-filter">
@@ -25,23 +19,11 @@
   </header>
 
   <main>
-    <section id="movie-container">
-      
-      <!-- Movie List Section -->
-      <section id="movie-list" class="movie-grid"></section>
-      
-      <!-- Pagination Section -->
-      <section id="pagination" class="pagination"></section>
-      
-      <!-- Popular Movies Section -->
-      <section id="popular-content">
-        <h2>Popular Movies</h2>
-        <div id="popular-movie-list" class="movie-grid"></div>
-      </section>
-      
-      <!-- Movie Details Section -->
-      <section id="movie-details" class="movie-details"></section>
-    </section>
+    <!-- All movie rows (including favorites) will be dynamically added here -->
+    <section id="movie-container"></section>
+
+    <!-- Movie details -->
+    <section id="movie-details"></section>
   </main>
 
   <footer>
