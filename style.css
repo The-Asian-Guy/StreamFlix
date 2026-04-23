@@ -1,150 +1,128 @@
-/* Reset and body */
-body, h1, h2, h3, p, ul, li {
-  margin: 0;
-  padding: 0;
-}
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: #141414;
   color: #fff;
+  font-family: Arial, sans-serif;
+  margin: 0;
 }
 
-/* Header */
 header {
-  background-color: #141414;
-  padding: 20px 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid #333;
+  padding: 10px 20px;
+  background-color: #141414;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
+
 header h1 {
-  font-size: 2em;
-  font-weight: bold;
+  margin: 0;
   color: #e50914;
 }
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 20px;
-}
-nav a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-}
-.filters {
-  display: flex;
-  gap: 10px;
-}
-.filters input, .filters select {
-  padding: 6px 10px;
+
+header input, header select {
+  padding: 5px 10px;
+  margin-left: 10px;
   border-radius: 4px;
   border: none;
-  background-color: #333;
-  color: #fff;
 }
 
-/* Main content */
-main {
-  padding: 20px 40px;
+.movie-row {
+  position: relative;
+  margin-bottom: 30px;
 }
 
-/* Movie Rows (Netflix style horizontal scroll) */
+.movie-row h2 {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
 .movie-grid {
   display: flex;
   overflow-x: auto;
-  gap: 15px;
-  padding-bottom: 10px;
-  margin-bottom: 30px;
-}
-.movie-grid::-webkit-scrollbar {
-  height: 8px;
-}
-.movie-grid::-webkit-scrollbar-thumb {
-  background-color: #555;
-  border-radius: 4px;
-}
-.movie-grid::-webkit-scrollbar-track {
-  background-color: transparent;
+  gap: 10px;
+  padding-left: 10px;
+  scroll-behavior: smooth;
 }
 
-/* Movie items */
 .movie-item {
-  min-width: 160px;
-  background-color: #1e1e1e;
-  border-radius: 5px;
-  text-align: center;
-  transition: transform 0.3s;
+  position: relative;
+  min-width: 150px;
 }
-.movie-item:hover {
-  transform: scale(1.1);
-}
+
 .movie-item img {
   width: 100%;
   border-radius: 4px;
 }
-.movie-item h3 {
-  margin: 8px 0 4px 0;
-  font-size: 0.9em;
-  font-weight: bold;
+
+.movie-buttons {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
-.movie-item button {
-  padding: 4px 8px;
-  background-color: #e50914;
+
+.movie-buttons button {
   border: none;
   color: #fff;
-  border-radius: 3px;
-  font-size: 0.8em;
   cursor: pointer;
-  margin-bottom: 6px;
-}
-.movie-item button:hover {
-  background-color: #f6121d;
-}
-
-/* Popular Movies Section */
-#popular-content h2 {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-}
-
-/* Movie Details Section */
-.movie-details {
-  background-color: #1e1e1e;
-  padding: 20px;
-  border-radius: 8px;
-  margin-top: 30px;
-  display: flex;
-  gap: 20px;
-}
-.movie-details img {
-  width: 200px;
   border-radius: 4px;
-}
-.movie-details div {
-  max-width: 800px;
-}
-.movie-details h2 {
-  margin-bottom: 10px;
-}
-.movie-details p {
-  margin-bottom: 10px;
-}
-.movie-details ul {
-  list-style: disc inside;
+  padding: 3px 6px;
+  background-color: rgba(0,0,0,0.7);
 }
 
-/* Pagination (optional, can hide for Netflix style) */
-.pagination {
-  display: none;
+.movie-buttons button:last-child {
+  background-color: rgba(229, 9, 20, 0.8);
+  width: 30px;
+  height: 30px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
 }
 
-/* Footer */
-footer {
-  text-align: center;
-  padding: 20px 0;
-  background-color: #141414;
-  border-top: 1px solid #333;
-  margin-top: 40px;
+.movie-buttons button:last-child:hover {
+  transform: scale(1.2);
+  background-color: rgba(255, 0, 0, 1);
+}
+
+/* Scroll arrows */
+.scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 60px;
+  background-color: rgba(20, 20, 20, 0.7);
+  border: none;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.scroll-arrow:hover {
+  background-color: rgba(229, 9, 20, 0.9);
+}
+
+.scroll-left { left: 0; }
+.scroll-right { right: 0; }
+
+#movie-details {
+  padding: 20px;
+}
+
+#movie-details img {
+  float: left;
+  margin-right: 20px;
+  width: 200px;
 }
