@@ -16,27 +16,36 @@
         <li><a href="#">Popular</a></li>
       </ul>
     </nav>
-    <input type="text" id="search-bar" placeholder="Search Movies">
-    <select id="genre-filter">
-      <option value="">Select Genre</option>
-    </select>
+    <div class="filters">
+      <input type="text" id="search-bar" placeholder="Search Movies">
+      <select id="genre-filter">
+        <option value="">All Genres</option>
+      </select>
+    </div>
   </header>
 
   <main>
     <section id="movie-container">
-      <section id="banner"></section>
-      <section id="movie-list"></section>
+      
+      <!-- Movie List Section -->
+      <section id="movie-list" class="movie-grid"></section>
+      
+      <!-- Pagination Section -->
+      <section id="pagination" class="pagination"></section>
+      
+      <!-- Popular Movies Section -->
       <section id="popular-content">
         <h2>Popular Movies</h2>
-        <div id="popular-movie-list"></div>
+        <div id="popular-movie-list" class="movie-grid"></div>
       </section>
-      <section id="movie-details"></section>
-      <section id="pagination"></section>
+      
+      <!-- Movie Details Section -->
+      <section id="movie-details" class="movie-details"></section>
     </section>
   </main>
 
   <footer>
-    <p>Created Kevin Ton Le</p>
+    <p>Created by Kevin Ton Le</p>
   </footer>
 
   <script src="app.js"></script>
