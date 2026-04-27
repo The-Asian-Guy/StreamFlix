@@ -7,29 +7,30 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
-  <header>
-    <h1>StreamFlix</h1>
-    <div class="filters">
-      <input type="text" id="search-bar" placeholder="Search Movies">
-      <select id="genre-filter">
-        <option value="">All Genres</option>
-      </select>
-    </div>
-  </header>
 
-  <main>
-    <!-- All movie rows (including favorites) will be dynamically added here -->
-    <section id="movie-container"></section>
+<header>
+  <h1>StreamFlix</h1>
 
-    <!-- Movie details -->
-    <section id="movie-details"></section>
-  </main>
+  <div>
+    <input type="text" id="search-bar" placeholder="Search Movies">
+    <select id="genre-filter">
+      <option value="">All Genres</option>
+    </select>
+  </div>
+</header>
 
-  <footer>
-    <p>Created by Kevin Ton Le</p>
-  </footer>
+<main>
+  <section id="movie-container"></section>
+  <section id="movie-details"></section>
+</main>
 
-  <script src="app.js"></script>
+<footer>
+  <p>Created by Kevin Ton Le</p>
+</footer>
+
+<script src="app.js"></script>
+
 </body>
 </html>
