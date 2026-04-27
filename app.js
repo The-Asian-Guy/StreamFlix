@@ -113,14 +113,14 @@ function renderFavoritesRow() {
   if (favorites.length === 0) return;
 
   const container = $('#movie-container');
-  const row = $(`
+  const row = $(
     <section class="movie-row" id="favorites-row">
       <h2>My Favorites</h2>
       <button class="scroll-arrow scroll-left">&#10094;</button>
       <div class="movie-grid"></div>
       <button class="scroll-arrow scroll-right">&#10095;</button>
     </section>
-  `);
+  );
   container.prepend(row);
   const grid = row.find('.movie-grid');
 
