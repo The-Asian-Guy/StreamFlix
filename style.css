@@ -57,3 +57,11 @@ h1 {
 
 .left { left: 0; }
 .right { right: 0; }
+.movie-grid {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.movie-grid::-webkit-scrollbar {
+  display: none;
+}
