@@ -54,8 +54,21 @@ function createMovieRow(title, containerId, movies) {
     grid.append(movieItem);
   });
 
-  row.find('.scroll-left').click(() => grid.animate({ scrollLeft: grid.scrollLeft() - 400 }, 300));
-  row.find('.scroll-right').click(() => grid.animate({ scrollLeft: grid.scrollLeft() + 400 }, 300));
+  const gridEl = grid[0];
+
+row.find('.scroll-left').on('click', function () {
+  gridEl.scrollBy({
+    left: -gridEl.clientWidth * 0.8,
+    behavior: 'smooth'
+  });
+});
+
+row.find('.scroll-right').on('click', function () {
+  gridEl.scrollBy({
+    left: gridEl.clientWidth * 0.8,
+    behavior: 'smooth'
+  });
+});
 }
 
 function fetchMoviesRow(endpoint, title) {
@@ -125,8 +138,21 @@ function renderFavoritesRow() {
     grid.append(movieItem);
   });
 
-  row.find('.scroll-left').click(() => grid.animate({ scrollLeft: grid.scrollLeft() - 400 }, 300));
-  row.find('.scroll-right').click(() => grid.animate({ scrollLeft: grid.scrollLeft() + 400 }, 300));
+  const gridEl = grid[0];
+
+row.find('.scroll-left').on('click', function () {
+  gridEl.scrollBy({
+    left: -gridEl.clientWidth * 0.8,
+    behavior: 'smooth'
+  });
+});
+
+row.find('.scroll-right').on('click', function () {
+  gridEl.scrollBy({
+    left: gridEl.clientWidth * 0.8,
+    behavior: 'smooth'
+  });
+});
 }
 
 function viewDetails(movieId) {
