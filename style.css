@@ -30,8 +30,10 @@ header input, header select {
 
 .movie-row {
   position: relative;
-  margin-bottom: 30px;
+  overflow: hidden;
+  padding: 0 40px;
 }
+
 
 .movie-row h2 {
   margin-left: 10px;
@@ -41,14 +43,23 @@ header input, header select {
 .movie-grid {
   display: flex;
   overflow-x: auto;
-  gap: 10px;
-  padding-left: 10px;
+  gap: 12px;
   scroll-behavior: smooth;
+
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  scrollbar-width: none;
+}
+
+.movie-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .movie-item {
-  position: relative;
-  min-width: 150px;
+  flex: 0 0 auto;
+  width: 160px;
+  scroll-snap-align: start;
 }
 
 .movie-item img {
