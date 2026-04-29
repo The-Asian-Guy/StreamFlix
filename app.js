@@ -108,10 +108,22 @@ function fetchMovies(endpoint, title) {
 }
 
 /* ---------------- SEARCH ---------------- */
+// ---------------- SEARCH ----------------
 $('#search-bar').on('input', function () {
   const q = $(this).val();
-  if (!q) return;
+
+  if (!q) {
+    // If search is cleared, show favorites again
+    $('#movie-container').empty();
+    $('#favorites-container').show();
+    categories.forEach(c => fetchMovies(c.endpoint, c.title));
+    return;
+  }
+
+  // Hide favorites while searching
+  $('#favorites-container').hide();
   $('#movie-container').empty();
+
   $.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${q}`, data => {
     createMovieRow("Search Results", data.results.slice(0, 10));
   });
