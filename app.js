@@ -21,21 +21,13 @@ function fetchGenres() {
 }
 
 /* ---------------- FAVORITES ---------------- */
-function getFavorites() {
-  return JSON.parse(localStorage.getItem('favorites')) || [];
-}
-
-function isFavorite(id) {
-  return getFavorites().includes(id);
-}
+function getFavorites() { return JSON.parse(localStorage.getItem('favorites')) || []; }
+function isFavorite(id) { return getFavorites().includes(id); }
 
 function toggleFavorite(id) {
   let favorites = getFavorites();
-  if (favorites.includes(id)) {
-    favorites = favorites.filter(favId => favId !== id);
-  } else {
-    favorites.push(id);
-  }
+  if (favorites.includes(id)) favorites = favorites.filter(favId => favId !== id);
+  else favorites.push(id);
   localStorage.setItem('favorites', JSON.stringify(favorites));
   renderFavorites();
 }
@@ -49,24 +41,17 @@ function renderFavorites() {
   favIds.forEach(id => {
     $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
       container.append(`
-      <div class="movie-item">
-        <div class="poster-container">
-          <img src="${IMAGE_URL}${data.poster_path}" class="movie-poster" data-id="${data.id}">
-          <button class="fav-btn" data-id="${data.id}">★</button>
+        <div class="movie-item">
+          <div class="poster-container">
+            <img src="${IMAGE_URL}${data.poster_path}" class="movie-poster" data-id="${data.id}">
+            <button class="fav-btn" data-id="${data.id}">★</button>
+          </div>
+          <h3>${data.title}</h3>
         </div>
-        <h3>${data.title}</h3>
-      </div>
-    `);
-    
-    // Poster click for details
-    container.find('.movie-poster').last().click(function () {
-      const id = $(this).data('id');
-      viewDetails(id);
-    });
-      // Attach click handler for removing from favorites
-      container.find('.fav-btn').last().click(function () {
-        toggleFavorite(data.id);
-      });
+      `);
+
+      container.find('.fav-btn').last().click(() => toggleFavorite(data.id));
+      container.find('.movie-poster').last().click(() => viewDetails(data.id));
     });
   });
 }
@@ -85,7 +70,6 @@ function createMovieRow(title, movies) {
   `);
 
   container.append(row);
-
   const grid = row.find('.movie-grid');
   const gridEl = grid[0];
 
@@ -93,31 +77,28 @@ function createMovieRow(title, movies) {
     if (!movie.poster_path) return;
     const isFav = isFavorite(movie.id);
 
-  grid.append(`
-    <div class="movie-item">
-      <div class="poster-container">
-        <img src="${IMAGE_URL}${movie.poster_path}" class="movie-poster" data-id="${movie.id}">
-        <button class="fav-btn" data-id="${movie.id}">
-          ${isFav ? '★' : '☆'}
-        </button>
+    grid.append(`
+      <div class="movie-item">
+        <div class="poster-container">
+          <img src="${IMAGE_URL}${movie.poster_path}" class="movie-poster" data-id="${movie.id}">
+          <button class="fav-btn" data-id="${movie.id}">${isFav ? '★' : '☆'}</button>
+        </div>
+        <h3>${movie.title}</h3>
       </div>
-      <h3>${movie.title}</h3>
-    </div>
-  `);
-    grid.find('.movie-poster').click(function () {
-      const id = $(this).data('id');
-      viewDetails(id);
-    });
+    `);
   });
 
-  // Attach favorite button clicks
   grid.find('.fav-btn').click(function () {
     const id = parseInt($(this).data('id'));
     toggleFavorite(id);
     $(this).text(isFavorite(id) ? '★' : '☆');
   });
 
-  // Scroll arrows
+  grid.find('.movie-poster').click(function () {
+    const id = $(this).data('id');
+    viewDetails(id);
+  });
+
   row.find('.left').click(() => gridEl.scrollBy({ left: -300, behavior: 'smooth' }));
   row.find('.right').click(() => gridEl.scrollBy({ left: 300, behavior: 'smooth' }));
 }
@@ -145,17 +126,13 @@ $('#genre-filter').on('change', function () {
   const genre = $(this).val();
   $('#movie-container').empty();
 
-  if (!genre) {
-    // Reset to default categories
-    categories.forEach(c => fetchMovies(c.endpoint, c.title));
-  } else {
-    $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
-      createMovieRow("Genre Results", data.results.slice(0, 10));
-    });
-  }
+  if (!genre) categories.forEach(c => fetchMovies(c.endpoint, c.title));
+  else $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
+    createMovieRow("Genre Results", data.results.slice(0, 10));
+  });
 });
 
-/* ---------------- DETAILS ---------------- */
+/* ---------------- DETAILS / MODAL ---------------- */
 function viewDetails(id) {
   $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
     $('#movie-details').html(`
@@ -164,26 +141,16 @@ function viewDetails(id) {
       <p>${data.overview}</p>
       <p>⭐ ${data.vote_average}</p>
     `);
-
-    // Show modal
     $('#movie-modal').fadeIn();
   });
 }
 
-// Close modal when clicking X
-$('.close').click(function () {
-  $('#movie-modal').fadeOut();
-});
+$('.close').click(() => $('#movie-modal').fadeOut());
+$('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-modal').fadeOut(); });
 
-// Close modal when clicking outside the modal content
-$('#movie-modal').click(function (e) {
-  if (e.target.id === 'movie-modal') {
-    $(this).fadeOut();
-  }
-});
 /* ---------------- INIT ---------------- */
 $(document).ready(() => {
   fetchGenres();
   categories.forEach(c => fetchMovies(c.endpoint, c.title));
-  renderFavorites(); // Load favorites on page load
+  renderFavorites();
 });
