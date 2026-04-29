@@ -84,19 +84,24 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
 /* ---------------- RENDER FAVORITES ---------------- */
 function renderFavorites() {
   const favIds = getFavorites();
-  $('#favorites-container').empty();
+  const container = $('#favorites-container');
+  container.empty();
 
   if (favIds.length === 0) return;
 
-  favIds.forEach(id => {
-    $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
-      createMovieRow({
-        title: "Favorites",
-        movies: [data],
-        container: '#favorites-container',
-        hideArrows: false,
-        hearts: true
-      });
+  // Fetch all favorite movies
+  const requests = favIds.map(id => $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`));
+
+  $.when(...requests).done((...results) => {
+    // results is an array of responses; if only one favorite, results[0] is the movie data
+    const movies = results.map(r => r[0] || r); 
+
+    createMovieRow({
+      title: "Favorites",
+      movies: movies,
+      container: '#favorites-container',
+      hideArrows: false,
+      hearts: true
     });
   });
 }
