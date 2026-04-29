@@ -74,9 +74,16 @@ h1 {
   background: rgba(0,0,0,0.7);
   border: none;
   color: white;
-  font-size: 25px;
+  font-size: 40px; /* bigger arrows */
   cursor: pointer;
-  padding: 10px;
+  padding: 15px 20px;
+  border-radius: 50%;
+  z-index: 5;
+  transition: background 0.2s;
+}
+
+.scroll-arrow:hover {
+  background: rgba(0,0,0,0.9);
 }
 
 .left { left: 0; }
@@ -91,7 +98,7 @@ h1 {
   display: none;
 }
 
-/* Modal (optional) */
+/* Modal */
 #movie-modal {
   display: none;
   position: fixed;
