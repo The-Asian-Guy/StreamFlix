@@ -34,12 +34,26 @@ function toggleFavorite(id) {
 /* ---------------- RENDER FAVORITES ---------------- */
 function renderFavorites() {
   const favIds = getFavorites();
-  const container = $('#favorites-list');
-  container.empty();
+  if (favIds.length === 0) {
+    $('#favorites-container').empty();
+    return;
+  }
+
+  const row = $(`
+    <section class="movie-row">
+      <h2>Favorites</h2>
+      <button class="scroll-arrow left">&#10094;</button>
+      <div class="movie-grid" id="favorites-grid"></div>
+      <button class="scroll-arrow right">&#10095;</button>
+    </section>
+  `);
+
+  $('#favorites-container').html(row);
+  const gridEl = row.find('#favorites-grid')[0];
 
   favIds.forEach(id => {
     $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
-      container.append(`
+      row.find('#favorites-grid').append(`
         <div class="movie-item">
           <div class="poster-container">
             <img src="${IMAGE_URL}${data.poster_path}" class="movie-poster" data-id="${data.id}">
@@ -49,10 +63,14 @@ function renderFavorites() {
         </div>
       `);
 
-      container.find('.fav-btn').last().click(() => toggleFavorite(data.id));
-      container.find('.movie-poster').last().click(() => viewDetails(data.id));
+      row.find('.fav-btn').last().click(() => toggleFavorite(data.id));
+      row.find('.movie-poster').last().click(() => viewDetails(data.id));
     });
   });
+
+  // Add scrolling
+  row.find('.left').click(() => gridEl.scrollBy({ left: -300, behavior: 'smooth' }));
+  row.find('.right').click(() => gridEl.scrollBy({ left: 300, behavior: 'smooth' }));
 }
 
 /* ---------------- CREATE MOVIE ROW ---------------- */
@@ -71,7 +89,6 @@ function createMovieRow(title, movies, hideArrows = false) {
   const grid = row.find('.movie-grid');
   const gridEl = grid[0];
 
-  // Hide arrows if needed
   if (hideArrows) row.find('.scroll-arrow').hide();
 
   movies.forEach(movie => {
@@ -127,7 +144,7 @@ $('#search-bar').on('input', function () {
   $('#movie-container').empty();
 
   $.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${q}`, data => {
-    createMovieRow("Search Results", data.results.slice(0, 10), true);
+    createMovieRow("Search Results", data.results.slice(0, 10), false); // show arrows
   });
 });
 
