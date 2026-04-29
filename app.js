@@ -63,7 +63,6 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
     `);
   });
 
-  // Handle clicks
   row.find('.movie-poster').click(function () {
     viewDetails($(this).data('id'));
   });
@@ -74,7 +73,6 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
     $(this).text(isFavorite(id) ? '❤️' : '🤍');
   });
 
-  // Scroll arrows
   row.find('.left').click(() => grid.scrollBy({ left: -300, behavior: 'smooth' }));
   row.find('.right').click(() => grid.scrollBy({ left: 300, behavior: 'smooth' }));
 
@@ -89,20 +87,10 @@ function renderFavorites() {
 
   if (favIds.length === 0) return;
 
-  // Fetch all favorite movies
   const requests = favIds.map(id => $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`));
-
   $.when(...requests).done((...results) => {
-    // results is an array of responses; if only one favorite, results[0] is the movie data
-    const movies = results.map(r => r[0] || r); 
-
-    createMovieRow({
-      title: "Favorites",
-      movies: movies,
-      container: '#favorites-container',
-      hideArrows: false,
-      hearts: true
-    });
+    const movies = results.map(r => r[0] || r);
+    createMovieRow({ title: "Favorites", movies, container: '#favorites-container', hearts: true });
   });
 }
 
@@ -133,17 +121,20 @@ $('#search-bar').on('input', function () {
 
 /* ---------------- GENRE FILTER ---------------- */
 $('#genre-filter').on('change', function () {
-  const genre = $(this).val();
+  const genreId = $(this).val();
   $('#favorites-container').hide();
   $('#movie-container').empty();
 
-  if (!genre) {
+  if (!genreId) {
     categories.forEach(c => fetchMovies(c.endpoint, c.title));
-  } else {
-    $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
-      createMovieRow({ title: "Genre Results", movies: data.results.slice(0, 10) });
-    });
+    return;
   }
+
+  const genreName = genresList.find(g => g.id == genreId)?.name || "Genre Results";
+
+  $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genreId}`, data => {
+    createMovieRow({ title: genreName, movies: data.results.slice(0, 10) });
+  });
 });
 
 /* ---------------- DETAILS ---------------- */
