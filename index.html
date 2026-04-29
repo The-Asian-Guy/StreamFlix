@@ -9,8 +9,10 @@
 </head>
 
 <body>
+
 <header>
   <h1>StreamFlix</h1>
+
   <div>
     <input type="text" id="search-bar" placeholder="Search Movies">
     <select id="genre-filter">
@@ -20,28 +22,22 @@
 </header>
 
 <main>
-  <!-- Favorites Section at the top -->
-  <section id="favorites-container">
-    <h2>My Favorites</h2>
-    <div id="favorites-list" class="movie-grid"></div>
-  </section>
-
-  <!-- Movie Rows -->
+  <section id="favorites-container"></section>
   <section id="movie-container"></section>
-
-  <!-- Movie Details Modal -->
-  <div id="movie-modal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <div id="movie-details"></div>
-    </div>
-  </div>
+  <section id="movie-details"></section>
 </main>
 
 <footer>
   <p>Created by Kevin Ton Le</p>
 </footer>
 
+<!-- Optional modal for movie details -->
+<div id="movie-modal">
+  <span class="close">&times;</span>
+  <div id="movie-details"></div>
+</div>
+
 <script src="app.js"></script>
+
 </body>
 </html>
