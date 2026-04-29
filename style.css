@@ -108,6 +108,24 @@ header select {
   width: 80%;
 }
 
+/* ---------------- GENRE FILTER ---------------- */
+$('#genre-filter').on('change', function () {
+  const genre = $(this).val();
+
+  // Hide favorites when selecting a genre
+  $('#favorites-container').hide();
+
+  $('#movie-container').empty();
+  
+  if (!genre) {
+    // If "All Genres" is selected, show all categories again
+    categories.forEach(c => fetchMovies(c.endpoint, c.title));
+  } else {
+    $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
+      createMovieRow("Genre Results", data.results.slice(0, 10));
+    });
+  }
+});
 /* ---------------- POSTER CONTAINER / HEART BUTTON ---------------- */
 .poster-container {
   position: relative;
