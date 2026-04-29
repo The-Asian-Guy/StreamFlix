@@ -55,21 +55,30 @@ h1 { color: #e50914; }
 #favorites-list .movie-item img { width: 80%; }
 
 /* POSTER CONTAINER */
-.poster-container { position: relative; width: 100%; }
+.poster-container {
+  position: relative;
+  width: 100%;
+  display: inline-block; /* ensure the container fits the image */
+}
+
 .poster-container .fav-btn {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(0,0,0,0.5);
+  top: 5px;        /* distance from top of the poster */
+  right: 5px;      /* distance from right edge */
+  background: rgba(0,0,0,0.5); /* semi-transparent for visibility */
   border: none;
-  font-size: 22px;
+  font-size: 22px;   /* adjust size as needed */
   cursor: pointer;
   padding: 5px 8px;
   border-radius: 50%;
-  color: red;
+  color: red;        /* heart color */
   transition: transform 0.2s;
+  z-index: 10;       /* make sure it sits above the image */
 }
-.poster-container .fav-btn:hover { transform: scale(1.3); }
+
+.poster-container .fav-btn:hover {
+  transform: scale(1.3);
+}
 
 /* MODAL */
 .modal {
