@@ -23,7 +23,6 @@ function fetchGenres() {
 /* ---------------- FAVORITES ---------------- */
 function getFavorites() { return JSON.parse(localStorage.getItem('favorites')) || []; }
 function isFavorite(id) { return getFavorites().includes(id); }
-
 function toggleFavorite(id) {
   let favorites = getFavorites();
   if (favorites.includes(id)) favorites = favorites.filter(favId => favId !== id);
@@ -44,7 +43,7 @@ function renderFavorites() {
         <div class="movie-item">
           <div class="poster-container">
             <img src="${IMAGE_URL}${data.poster_path}" class="movie-poster" data-id="${data.id}">
-            <button class="fav-btn" data-id="${data.id}">${isFav ? '❤️' : '🤍'}</button>
+            <button class="fav-btn" data-id="${data.id}">❤️</button>
           </div>
           <h3>${data.title}</h3>
         </div>
@@ -59,7 +58,6 @@ function renderFavorites() {
 /* ---------------- CREATE MOVIE ROW ---------------- */
 function createMovieRow(title, movies) {
   const container = $('#movie-container');
-
   const row = $(`
     <section class="movie-row">
       <h2>${title}</h2>
@@ -76,7 +74,6 @@ function createMovieRow(title, movies) {
   movies.forEach(movie => {
     if (!movie.poster_path) return;
     const isFav = isFavorite(movie.id);
-
     grid.append(`
       <div class="movie-item">
         <div class="poster-container">
@@ -91,7 +88,7 @@ function createMovieRow(title, movies) {
   grid.find('.fav-btn').click(function () {
     const id = parseInt($(this).data('id'));
     toggleFavorite(id);
-    $(this).text(isFavorite(id) ? '★' : '☆');
+    $(this).text(isFavorite(id) ? '❤️' : '🤍');
   });
 
   grid.find('.movie-poster').click(function () {
@@ -114,7 +111,6 @@ function fetchMovies(endpoint, title) {
 $('#search-bar').on('input', function () {
   const q = $(this).val();
   if (!q) return;
-
   $('#movie-container').empty();
   $.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${q}`, data => {
     createMovieRow("Search Results", data.results.slice(0, 10));
@@ -125,7 +121,6 @@ $('#search-bar').on('input', function () {
 $('#genre-filter').on('change', function () {
   const genre = $(this).val();
   $('#movie-container').empty();
-
   if (!genre) categories.forEach(c => fetchMovies(c.endpoint, c.title));
   else $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
     createMovieRow("Genre Results", data.results.slice(0, 10));
@@ -144,7 +139,6 @@ function viewDetails(id) {
     $('#movie-modal').fadeIn();
   });
 }
-
 $('.close').click(() => $('#movie-modal').fadeOut());
 $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-modal').fadeOut(); });
 
