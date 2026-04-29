@@ -31,50 +31,8 @@ function toggleFavorite(id) {
   renderFavorites();
 }
 
-/* ---------------- RENDER FAVORITES ---------------- */
-function renderFavorites() {
-  const favIds = getFavorites();
-  if (favIds.length === 0) {
-    $('#favorites-container').empty();
-    return;
-  }
-
-  const row = $(`
-    <section class="movie-row">
-      <h2>Favorites</h2>
-      <button class="scroll-arrow left">&#10094;</button>
-      <div class="movie-grid" id="favorites-grid"></div>
-      <button class="scroll-arrow right">&#10095;</button>
-    </section>
-  `);
-
-  $('#favorites-container').html(row);
-  const gridEl = row.find('#favorites-grid')[0];
-
-  favIds.forEach(id => {
-    $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
-      row.find('#favorites-grid').append(`
-        <div class="movie-item">
-          <div class="poster-container">
-            <img src="${IMAGE_URL}${data.poster_path}" class="movie-poster" data-id="${data.id}">
-            <button class="fav-btn" data-id="${data.id}">❤️</button>
-          </div>
-          <h3>${data.title}</h3>
-        </div>
-      `);
-
-      row.find('.fav-btn').last().click(() => toggleFavorite(data.id));
-      row.find('.movie-poster').last().click(() => viewDetails(data.id));
-    });
-  });
-
-  row.find('.left').click(() => gridEl.scrollBy({ left: -300, behavior: 'smooth' }));
-  row.find('.right').click(() => gridEl.scrollBy({ left: 300, behavior: 'smooth' }));
-}
-
-/* ---------------- CREATE MOVIE ROW ---------------- */
-function createMovieRow(title, movies, hideArrows = false) {
-  const container = $('#movie-container');
+/* ---------------- GENERIC ROW CREATOR ---------------- */
+function createMovieRow({ title, movies, container = '#movie-container', hideArrows = false, hearts = true }) {
   const row = $(`
     <section class="movie-row">
       <h2>${title}</h2>
@@ -84,80 +42,101 @@ function createMovieRow(title, movies, hideArrows = false) {
     </section>
   `);
 
-  container.append(row);
-  const grid = row.find('.movie-grid');
-  const gridEl = grid[0];
+  $(container).append(row);
+  const grid = row.find('.movie-grid')[0];
 
   if (hideArrows) row.find('.scroll-arrow').hide();
 
   movies.forEach(movie => {
     if (!movie.poster_path) return;
-    const isFav = isFavorite(movie.id);
-    grid.append(`
+    const favHeart = hearts ? (isFavorite(movie.id) ? '❤️' : '🤍') : '';
+    const heartButton = hearts ? `<button class="fav-btn" data-id="${movie.id}">${favHeart}</button>` : '';
+
+    row.find('.movie-grid').append(`
       <div class="movie-item">
         <div class="poster-container">
           <img src="${IMAGE_URL}${movie.poster_path}" class="movie-poster" data-id="${movie.id}">
-          <button class="fav-btn" data-id="${movie.id}">${isFav ? '❤️' : '🤍'}</button>
+          ${heartButton}
         </div>
         <h3>${movie.title}</h3>
       </div>
     `);
   });
 
-  grid.find('.fav-btn').click(function () {
-    const id = parseInt($(this).data('id'));
+  // Handle clicks
+  row.find('.movie-poster').click(function () {
+    viewDetails($(this).data('id'));
+  });
+
+  row.find('.fav-btn').click(function () {
+    const id = $(this).data('id');
     toggleFavorite(id);
     $(this).text(isFavorite(id) ? '❤️' : '🤍');
   });
 
-  grid.find('.movie-poster').click(function () {
-    const id = $(this).data('id');
-    viewDetails(id);
-  });
+  // Scroll arrows
+  row.find('.left').click(() => grid.scrollBy({ left: -300, behavior: 'smooth' }));
+  row.find('.right').click(() => grid.scrollBy({ left: 300, behavior: 'smooth' }));
 
-  if (!hideArrows) {
-    row.find('.left').click(() => gridEl.scrollBy({ left: -300, behavior: 'smooth' }));
-    row.find('.right').click(() => gridEl.scrollBy({ left: 300, behavior: 'smooth' }));
-  }
+  return row;
+}
+
+/* ---------------- RENDER FAVORITES ---------------- */
+function renderFavorites() {
+  const favIds = getFavorites();
+  $('#favorites-container').empty();
+
+  if (favIds.length === 0) return;
+
+  favIds.forEach(id => {
+    $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
+      createMovieRow({
+        title: "Favorites",
+        movies: [data],
+        container: '#favorites-container',
+        hideArrows: false,
+        hearts: true
+      });
+    });
+  });
 }
 
 /* ---------------- FETCH MOVIES ---------------- */
 function fetchMovies(endpoint, title) {
   $.get(`${BASE_URL}${endpoint}?api_key=${API_KEY}`, data => {
-    createMovieRow(title, data.results.slice(0, 10));
+    createMovieRow({ title, movies: data.results.slice(0, 10) });
   });
 }
 
 /* ---------------- SEARCH ---------------- */
 $('#search-bar').on('input', function () {
   const q = $(this).val();
+  $('#movie-container').empty();
 
   if (!q) {
-    $('#movie-container').empty();
     $('#favorites-container').show();
     categories.forEach(c => fetchMovies(c.endpoint, c.title));
     return;
   }
 
   $('#favorites-container').hide();
-  $('#movie-container').empty();
 
   $.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${q}`, data => {
-    createMovieRow("Search Results", data.results.slice(0, 10), false);
+    createMovieRow({ title: "Search Results", movies: data.results.slice(0, 10) });
   });
 });
 
 /* ---------------- GENRE FILTER ---------------- */
 $('#genre-filter').on('change', function () {
   const genre = $(this).val();
-  $('#favorites-container').hide(); // hide favorites when selecting a genre
+  $('#favorites-container').hide();
   $('#movie-container').empty();
 
   if (!genre) {
     categories.forEach(c => fetchMovies(c.endpoint, c.title));
   } else {
     $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
-      createMovieRow("Genre Results", data.results.slice(0, 10));
+      createMovieRow({ title: "Genre Results", movies: data.results.slice(0, 10) });
     });
   }
 });
