@@ -44,7 +44,7 @@ function renderFavorites() {
         <div class="movie-item">
           <div class="poster-container">
             <img src="${IMAGE_URL}${data.poster_path}" class="movie-poster" data-id="${data.id}">
-            <button class="fav-btn" data-id="${data.id}">★</button>
+            <button class="fav-btn" data-id="${data.id}">${isFav ? '❤️' : '🤍'}</button>
           </div>
           <h3>${data.title}</h3>
         </div>
@@ -81,7 +81,7 @@ function createMovieRow(title, movies) {
       <div class="movie-item">
         <div class="poster-container">
           <img src="${IMAGE_URL}${movie.poster_path}" class="movie-poster" data-id="${movie.id}">
-          <button class="fav-btn" data-id="${movie.id}">${isFav ? '★' : '☆'}</button>
+          <button class="fav-btn" data-id="${movie.id}">${isFav ? '❤️' : '🤍'}</button>
         </div>
         <h3>${movie.title}</h3>
       </div>
