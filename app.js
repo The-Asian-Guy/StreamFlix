@@ -49,15 +49,20 @@ function renderFavorites() {
   favIds.forEach(id => {
     $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
       container.append(`
-        <div class="movie-item">
-          <div class="poster-container">
-            <img src="${IMAGE_URL}${data.poster_path}">
-            <button class="fav-btn" data-id="${data.id}">★</button>
-          </div>
-          <h3>${data.title}</h3>
-          <button onclick="viewDetails(${data.id})">Details</button>
+      <div class="movie-item">
+        <div class="poster-container">
+          <img src="${IMAGE_URL}${data.poster_path}" class="movie-poster" data-id="${data.id}">
+          <button class="fav-btn" data-id="${data.id}">★</button>
         </div>
-      `);
+        <h3>${data.title}</h3>
+      </div>
+    `);
+    
+    // Poster click for details
+    container.find('.movie-poster').last().click(function () {
+      const id = $(this).data('id');
+      viewDetails(id);
+    });
       // Attach click handler for removing from favorites
       container.find('.fav-btn').last().click(function () {
         toggleFavorite(data.id);
@@ -88,18 +93,21 @@ function createMovieRow(title, movies) {
     if (!movie.poster_path) return;
     const isFav = isFavorite(movie.id);
 
-    grid.append(`
-      <div class="movie-item">
-        <div class="poster-container">
-          <img src="${IMAGE_URL}${movie.poster_path}">
-          <button class="fav-btn" data-id="${movie.id}">
-            ${isFav ? '★' : '☆'}
-          </button>
-        </div>
-        <h3>${movie.title}</h3>
-        <button onclick="viewDetails(${movie.id})">Details</button>
+  grid.append(`
+    <div class="movie-item">
+      <div class="poster-container">
+        <img src="${IMAGE_URL}${movie.poster_path}" class="movie-poster" data-id="${movie.id}">
+        <button class="fav-btn" data-id="${movie.id}">
+          ${isFav ? '★' : '☆'}
+        </button>
       </div>
-    `);
+      <h3>${movie.title}</h3>
+    </div>
+  `);
+    grid.find('.movie-poster').click(function () {
+      const id = $(this).data('id');
+      viewDetails(id);
+    });
   });
 
   // Attach favorite button clicks
@@ -156,9 +164,23 @@ function viewDetails(id) {
       <p>${data.overview}</p>
       <p>⭐ ${data.vote_average}</p>
     `);
+
+    // Show modal
+    $('#movie-modal').fadeIn();
   });
 }
 
+// Close modal when clicking X
+$('.close').click(function () {
+  $('#movie-modal').fadeOut();
+});
+
+// Close modal when clicking outside the modal content
+$('#movie-modal').click(function (e) {
+  if (e.target.id === 'movie-modal') {
+    $(this).fadeOut();
+  }
+});
 /* ---------------- INIT ---------------- */
 $(document).ready(() => {
   fetchGenres();
