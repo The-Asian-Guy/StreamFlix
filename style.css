@@ -1,3 +1,4 @@
+/* GENERAL STYLES */
 body {
   background: #141414;
   color: white;
@@ -15,10 +16,10 @@ h1 {
   color: #e50914;
 }
 
-/* MOVIE ROW */
+/* MOVIE ROWS */
 .movie-row {
   position: relative;
-  padding: 0 40px;
+  padding: 0 20px;
 }
 
 .movie-grid {
@@ -26,9 +27,12 @@ h1 {
   gap: 10px;
   overflow-x: auto;
   scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
-  /* important */
-  scroll-snap-type: x mandatory;
+.movie-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .movie-item {
@@ -57,39 +61,8 @@ h1 {
 
 .left { left: 0; }
 .right { right: 0; }
-.movie-grid {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
 
-.movie-grid::-webkit-scrollbar {
-  display: none;
-}
-
-.poster-container {
-  position: relative;
-  width: 100%;
-}
-
-.poster-container .fav-btn {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background: rgba(0,0,0,0.6);
-  border: none;
-  color: gold;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 5px 8px;
-  border-radius: 50%;
-  transition: transform 0.2s;
-}
-
-.poster-container .fav-btn:hover {
-  transform: scale(1.2);
-}
-
-/* FAVORITES SECTION */
+/* FAVORITES */
 #favorites-container {
   padding: 20px 40px;
 }
@@ -98,23 +71,15 @@ h1 {
   margin-bottom: 10px;
 }
 
-/* Use same movie-grid layout for favorites */
-#favorites-list {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  scroll-behavior: smooth;
+#favorites-list .movie-item {
+  min-width: 120px;
 }
 
-#favorites-list::-webkit-scrollbar {
-  display: none;
-}
-#favorites-list {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+#favorites-list .movie-item img {
+  width: 80%;
 }
 
-/* POSTER CONTAINER FOR FAVORITES */
+/* POSTER CONTAINER */
 .poster-container {
   position: relative;
   width: 100%;
@@ -138,9 +103,9 @@ h1 {
   transform: scale(1.2);
 }
 
-/* MODAL STYLES */
+/* MODAL */
 .modal {
-  display: none; /* hidden by default */
+  display: none;
   position: fixed;
   z-index: 1000;
   left: 0;
@@ -154,10 +119,10 @@ h1 {
 .modal-content {
   background-color: #141414;
   margin: 50px auto;
-  padding: 20px;
+  padding: 15px;
   border-radius: 8px;
-  width: 80%;
-  max-width: 700px;
+  width: 90%;
+  max-width: 500px;
   color: white;
   position: relative;
 }
@@ -165,7 +130,7 @@ h1 {
 .modal-content img {
   width: 100%;
   border-radius: 5px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .close {
@@ -176,4 +141,13 @@ h1 {
   font-size: 30px;
   font-weight: bold;
   cursor: pointer;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .movie-item { min-width: 100px; }
+  .movie-item img { width: 75%; }
+
+  #favorites-list .movie-item { min-width: 100px; }
+  .modal-content { width: 95%; max-width: 350px; padding: 10px; }
 }
