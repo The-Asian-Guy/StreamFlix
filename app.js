@@ -24,15 +24,26 @@ function fetchGenres() {
 /* ---------------- CREATE ROW (FIXED SCROLL) ---------------- */
 function createMovieRow(title, movies) {
   const container = $('#movie-container');
-
-  const row = $(`
+  grid.append(
+  <div class="movie-item">
+    <div class="poster-container">
+      <img src="${IMAGE_URL}${movie.poster_path}">
+      <button class="fav-btn" data-id="${movie.id}">
+        ${isFav ? '★' : '☆'}
+      </button>
+    </div>
+    <h3>${movie.title}</h3>
+    <button onclick="viewDetails(${movie.id})">Details</button>
+  </div>
+);
+  const row = $(
     <section class="movie-row">
       <h2>${title}</h2>
       <button class="scroll-arrow left">&#10094;</button>
       <div class="movie-grid"></div>
       <button class="scroll-arrow right">&#10095;</button>
     </section>
-  `);
+  );
 
   container.append(row);
 
