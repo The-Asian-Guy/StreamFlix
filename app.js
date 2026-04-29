@@ -141,17 +141,21 @@ $('#genre-filter').on('change', function () {
 function viewDetails(id) {
   $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
     $('#movie-details').html(`
-      <img src="${IMAGE_URL}${data.poster_path}">
+      <img src="${IMAGE_URL}${data.poster_path}" alt="${data.title}">
       <h2>${data.title}</h2>
       <p>${data.overview}</p>
       <p>⭐ ${data.vote_average}</p>
+      <p>Release: ${data.release_date}</p>
     `);
     $('#movie-modal').fadeIn();
   });
 }
 
+// Close modal
 $('.close').click(() => $('#movie-modal').fadeOut());
-$('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-modal').fadeOut(); });
+$('#movie-modal').click(e => {
+  if (e.target.id === 'movie-modal') $('#movie-modal').fadeOut();
+});
 
 /* ---------------- INIT ---------------- */
 $(document).ready(() => {
