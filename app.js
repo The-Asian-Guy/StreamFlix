@@ -83,13 +83,18 @@ $('#search-bar').on('input', function () {
 /* ---------------- GENRE FILTER ---------------- */
 $('#genre-filter').on('change', function () {
   const genre = $(this).val();
-  if (!genre) return;
 
   $('#movie-container').empty();
 
-  $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
-    createMovieRow("Genre Results", data.results.slice(0, 10));
-  });
+  if (!genre) {
+    // If "All Genres" is selected, reload the default categories
+    categories.forEach(c => fetchMovies(c.endpoint, c.title));
+  } else {
+    // Otherwise, fetch movies for the selected genre
+    $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
+      createMovieRow("Genre Results", data.results.slice(0, 10));
+    });
+  }
 });
 
 /* ---------------- DETAILS ---------------- */
