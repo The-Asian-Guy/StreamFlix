@@ -88,3 +88,52 @@ h1 {
 .poster-container .fav-btn:hover {
   transform: scale(1.2);
 }
+
+/* FAVORITES SECTION */
+#favorites-container {
+  padding: 20px 40px;
+}
+
+#favorites-container h2 {
+  margin-bottom: 10px;
+}
+
+/* Use same movie-grid layout for favorites */
+#favorites-list {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+#favorites-list::-webkit-scrollbar {
+  display: none;
+}
+#favorites-list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* POSTER CONTAINER FOR FAVORITES */
+.poster-container {
+  position: relative;
+  width: 100%;
+}
+
+.poster-container .fav-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: gold;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px 8px;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.poster-container .fav-btn:hover {
+  transform: scale(1.2);
+}
