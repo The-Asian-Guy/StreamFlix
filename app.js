@@ -56,7 +56,7 @@ function renderFavorites() {
 }
 
 /* ---------------- CREATE MOVIE ROW ---------------- */
-function createMovieRow(title, movies) {
+function createMovieRow(title, movies, hideArrows = false) {
   const container = $('#movie-container');
   const row = $(`
     <section class="movie-row">
@@ -70,6 +70,9 @@ function createMovieRow(title, movies) {
   container.append(row);
   const grid = row.find('.movie-grid');
   const gridEl = grid[0];
+
+  // Hide arrows if needed
+  if (hideArrows) row.find('.scroll-arrow').hide();
 
   movies.forEach(movie => {
     if (!movie.poster_path) return;
@@ -96,8 +99,10 @@ function createMovieRow(title, movies) {
     viewDetails(id);
   });
 
-  row.find('.left').click(() => gridEl.scrollBy({ left: -300, behavior: 'smooth' }));
-  row.find('.right').click(() => gridEl.scrollBy({ left: 300, behavior: 'smooth' }));
+  if (!hideArrows) {
+    row.find('.left').click(() => gridEl.scrollBy({ left: -300, behavior: 'smooth' }));
+    row.find('.right').click(() => gridEl.scrollBy({ left: 300, behavior: 'smooth' }));
+  }
 }
 
 /* ---------------- FETCH MOVIES ---------------- */
@@ -108,24 +113,21 @@ function fetchMovies(endpoint, title) {
 }
 
 /* ---------------- SEARCH ---------------- */
-// ---------------- SEARCH ----------------
 $('#search-bar').on('input', function () {
   const q = $(this).val();
 
   if (!q) {
-    // If search is cleared, show favorites again
     $('#movie-container').empty();
     $('#favorites-container').show();
     categories.forEach(c => fetchMovies(c.endpoint, c.title));
     return;
   }
 
-  // Hide favorites while searching
   $('#favorites-container').hide();
   $('#movie-container').empty();
 
   $.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${q}`, data => {
-    createMovieRow("Search Results", data.results.slice(0, 10));
+    createMovieRow("Search Results", data.results.slice(0, 10), true);
   });
 });
 
@@ -133,10 +135,13 @@ $('#search-bar').on('input', function () {
 $('#genre-filter').on('change', function () {
   const genre = $(this).val();
   $('#movie-container').empty();
-  if (!genre) categories.forEach(c => fetchMovies(c.endpoint, c.title));
-  else $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
-    createMovieRow("Genre Results", data.results.slice(0, 10));
-  });
+  if (!genre) {
+    categories.forEach(c => fetchMovies(c.endpoint, c.title));
+  } else {
+    $.get(`${BASE_URL}/discover/movie?api_key=${API_KEY}&with_genres=${genre}`, data => {
+      createMovieRow("Genre Results", data.results.slice(0, 10));
+    });
+  }
 });
 
 /* ---------------- DETAILS / MODAL ---------------- */
@@ -151,6 +156,7 @@ function viewDetails(id) {
     $('#movie-modal').fadeIn();
   });
 }
+
 $('.close').click(() => $('#movie-modal').fadeOut());
 $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-modal').fadeOut(); });
 
