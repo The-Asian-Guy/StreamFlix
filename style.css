@@ -112,7 +112,7 @@ header select {
 .poster-container {
   position: relative;
   width: 100%;
-  display: inline-block;
+  display: fit-content;
 }
 
 .poster-container .fav-btn {
