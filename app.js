@@ -68,7 +68,6 @@ function renderFavorites() {
     });
   });
 
-  // Add scrolling
   row.find('.left').click(() => gridEl.scrollBy({ left: -300, behavior: 'smooth' }));
   row.find('.right').click(() => gridEl.scrollBy({ left: 300, behavior: 'smooth' }));
 }
@@ -144,14 +143,16 @@ $('#search-bar').on('input', function () {
   $('#movie-container').empty();
 
   $.get(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${q}`, data => {
-    createMovieRow("Search Results", data.results.slice(0, 10), false); // show arrows
+    createMovieRow("Search Results", data.results.slice(0, 10), false);
   });
 });
 
 /* ---------------- GENRE FILTER ---------------- */
 $('#genre-filter').on('change', function () {
   const genre = $(this).val();
+  $('#favorites-container').hide(); // hide favorites when selecting a genre
   $('#movie-container').empty();
+
   if (!genre) {
     categories.forEach(c => fetchMovies(c.endpoint, c.title));
   } else {
@@ -161,7 +162,7 @@ $('#genre-filter').on('change', function () {
   }
 });
 
-/* ---------------- DETAILS / MODAL ---------------- */
+/* ---------------- DETAILS ---------------- */
 function viewDetails(id) {
   $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
     $('#movie-details').html(`
