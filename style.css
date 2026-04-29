@@ -91,12 +91,16 @@ h1 {
   right: 5px;
   background: rgba(0,0,0,0.6);
   border: none;
-  color: gold;
-  font-size: 20px;
+  font-size: 22px; /* slightly bigger for heart */
   cursor: pointer;
   padding: 5px 8px;
   border-radius: 50%;
   transition: transform 0.2s;
+  color: red; /* make the hearts red */
+}
+
+.poster-container .fav-btn:hover {
+  transform: scale(1.3); /* slightly bigger hover effect */
 }
 
 .poster-container .fav-btn:hover {
