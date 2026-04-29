@@ -48,7 +48,7 @@ function renderFavorites() {
 
   favIds.forEach(id => {
     $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`, data => {
-      container.append(
+      container.append(`
         <div class="movie-item">
           <div class="poster-container">
             <img src="${IMAGE_URL}${data.poster_path}">
@@ -57,7 +57,7 @@ function renderFavorites() {
           <h3>${data.title}</h3>
           <button onclick="viewDetails(${data.id})">Details</button>
         </div>
-      );
+      `);
       // Attach click handler for removing from favorites
       container.find('.fav-btn').last().click(function () {
         toggleFavorite(data.id);
@@ -70,14 +70,14 @@ function renderFavorites() {
 function createMovieRow(title, movies) {
   const container = $('#movie-container');
 
-  const row = $(
+  const row = $(`
     <section class="movie-row">
       <h2>${title}</h2>
       <button class="scroll-arrow left">&#10094;</button>
       <div class="movie-grid"></div>
       <button class="scroll-arrow right">&#10095;</button>
     </section>
-  );
+  `);
 
   container.append(row);
 
