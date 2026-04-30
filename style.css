@@ -6,41 +6,48 @@ body {
   margin: 0;
 }
 
+/* HEADER */
 header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 200;
+  background: #141414;
   padding: 10px 20px;
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
-header h1 {
-  color: #e50914;
-  margin: 0;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* SEARCH AND FILTER CONTAINER */
-header > div {
-  position: absolute;
-  right: 20px;
+/* Search + genre filter */
+header .search-genre {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
-#search-bar, #genre-filter {
-  padding: 5px 10px;
-  border-radius: 5px;
-  border: none;
-  font-size: 14px;
+/* Padding for header */
+main {
+  padding-top: 80px;
 }
-#genre-filter {
-  padding: 5px 10px;
-  border-radius: 5px;
+
+/* Favorites toggle button */
+#toggle-favorites-btn {
+  background: #e50914;
+  color: white;
   border: none;
+  padding: 8px 12px;
   font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+#toggle-favorites-btn:hover {
+  background: #ff1c1c;
+  transform: scale(1.05);
 }
 
 /* MOVIE ROW */
@@ -221,29 +228,4 @@ header > div {
     top: 5px;
     right: 10px;
   }
-}
-
-/* FLOATING FAVORITES BUTTON */
-#toggle-favorites-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background: #e50914;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  z-index: 100;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-  transition: background 0.2s, transform 0.2s;
-}
-
-#toggle-favorites-btn.active {
-  background: #ff1c1c;
-}
-
-#toggle-favorites-btn:hover {
-  transform: scale(1.05);
 }
