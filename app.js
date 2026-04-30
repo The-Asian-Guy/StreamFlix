@@ -157,7 +157,7 @@ function viewDetails(id) {
       `);
       $('#movie-modal').fadeIn();
     })
-    .fail(err => console.error('Failed to fetch movie details:', err))
+    .fail(err => console.error(err))
     .always(() => { isModalLoading = false; });
 }
 
@@ -179,6 +179,7 @@ $('#toggle-favorites-btn').click(() => {
 
 /* ---------------- INIT ---------------- */
 $(document).ready(() => {
+  $('#movie-modal').hide(); // prevent empty modal flash
   fetchGenres();
   categories.forEach(c => fetchMovies(c.endpoint, c.title));
   renderFavorites();
