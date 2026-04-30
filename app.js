@@ -24,7 +24,7 @@ function fetchGenres() {
 
 /* ---------------- FAVORITES ---------------- */
 function getFavorites() {
-  return JSON.parse(localStorage.getItem('favorites'))?.map(Number) || [];
+  return JSON.parse(localStorage.getItem('favorites'))?.map(Number).filter(id => id > 0) || [];
 }
 
 function isFavorite(id) {
@@ -33,7 +33,7 @@ function isFavorite(id) {
 
 function toggleFavorite(id) {
   id = Number(id);
-  if (!id) return; // skip invalid IDs
+  if (!id) return;
 
   let favorites = getFavorites();
   if (favorites.includes(id)) {
@@ -44,6 +44,12 @@ function toggleFavorite(id) {
 
   localStorage.setItem('favorites', JSON.stringify(favorites));
   renderFavorites();
+  updateHeartButton(id); // instantly update the heart icon
+}
+
+/* ---------------- UPDATE HEART ICON ---------------- */
+function updateHeartButton(id) {
+  $(`.fav-btn[data-id='${id}']`).text(isFavorite(id) ? '❤️' : '🤍');
 }
 
 /* ---------------- GENERIC ROW CREATOR ---------------- */
@@ -83,7 +89,6 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
   row.find('.fav-btn').click(function () {
     const id = $(this).data('id');
     toggleFavorite(id);
-    $(this).text(isFavorite(id) ? '❤️' : '🤍');
   });
 
   row.find('.left').click(() => grid.scrollBy({ left: -300, behavior: 'smooth' }));
@@ -94,7 +99,7 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
 
 /* ---------------- RENDER FAVORITES ---------------- */
 function renderFavorites() {
-  const favIds = getFavorites().filter(id => id > 0); // remove invalid IDs
+  const favIds = getFavorites();
   const container = $('#favorites-container');
   container.empty();
 
@@ -184,7 +189,7 @@ function viewDetails(id) {
 $('.close').click(() => $('#movie-modal').fadeOut());
 $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-modal').fadeOut(); });
 
-/* ---------------- TOGGLE FAVORITES ---------------- */
+/* ---------------- TOGGLE FAVORITES BUTTON ---------------- */
 $('#toggle-favorites-btn').click(() => {
   favoritesVisible = !favoritesVisible;
 
