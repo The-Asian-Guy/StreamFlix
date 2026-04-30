@@ -1,4 +1,4 @@
-/* ---------------- GENERAL STYLES ---------------- */
+/* GENERAL STYLES */
 body {
   background: #141414;
   color: white;
@@ -6,57 +6,27 @@ body {
   margin: 0;
 }
 
-/* ---------------- HEADER ---------------- */
 header {
   display: flex;
-  justify-content: flex-end; /* search/filter on right */
+  justify-content: center; /* center title */
   align-items: center;
   padding: 10px 20px;
-  position: relative; /* needed for absolute positioning of title */
+  flex-wrap: wrap;
 }
 
-/* CENTERED TITLE */
 header h1 {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
   color: #e50914;
-  z-index: 1;
+  margin: 0 20px 10px 0;
 }
 
-/* SEARCH & GENRE FILTER */
 header div {
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
-  z-index: 2;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
-/* RESPONSIVE HEADER */
-@media (max-width: 500px) {
-  header {
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  header h1 {
-    position: static;
-    transform: none;
-  }
-
-  header div {
-    justify-content: center;
-    width: 100%;
-  }
-
-  #search-bar, #genre-filter {
-    width: 45%;
-  }
-}
-
-/* ---------------- MOVIE ROW ---------------- */
+/* MOVIE ROW */
 .movie-row {
   position: relative;
   padding: 0 40px;
@@ -92,7 +62,6 @@ header div {
   display: block;
   width: 100%;
   border-radius: 5px;
-  cursor: pointer;
 }
 
 .poster-container .fav-btn {
@@ -114,7 +83,7 @@ header div {
   transform: scale(1.3);
 }
 
-/* ---------------- SCROLL ARROWS ---------------- */
+/* SCROLL ARROWS */
 .scroll-arrow {
   position: absolute;
   top: 50%;
@@ -137,7 +106,7 @@ header div {
 .left { left: 0; }
 .right { right: 0; }
 
-/* ---------------- MODAL ---------------- */
+/* MODAL */
 #movie-modal {
   display: none;
   position: fixed;
@@ -159,21 +128,15 @@ header div {
   border-radius: 10px;
   color: white;
   text-align: center;
-
   width: 90%;
   max-width: 700px;
   max-height: 90vh;
-
   overflow-y: auto;
   padding: 20px;
   box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(229, 9, 20, 0.8) rgba(28, 28, 28, 0.6);
 }
 
 #movie-modal img {
@@ -202,37 +165,7 @@ header div {
   cursor: pointer;
 }
 
-#movie-modal .modal-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-#movie-modal .modal-content::-webkit-scrollbar-track {
-  background: rgba(28, 28, 28, 0.6);
-  border-radius: 3px;
-}
-
-#movie-modal .modal-content::-webkit-scrollbar-thumb {
-  background-color: rgba(229, 9, 20, 0.8);
-  border-radius: 3px;
-}
-
-#movie-modal .modal-content::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(229, 9, 20, 1);
-}
-
-@media (max-width: 500px) {
-  #movie-modal .modal-content {
-    padding: 15px;
-  }
-
-  #movie-modal .close {
-    font-size: 28px;
-    top: 5px;
-    right: 10px;
-  }
-}
-
-/* ---------------- FLOATING FAVORITES BUTTON ---------------- */
+/* FLOATING FAVORITES BUTTON */
 #toggle-favorites-btn {
   position: fixed;
   top: 20px;
@@ -252,13 +185,4 @@ header div {
 #toggle-favorites-btn:hover {
   background: #ff1c1c;
   transform: scale(1.05);
-}
-
-/* Move button lower on mobile to avoid overlap */
-@media (max-width: 500px) {
-  #toggle-favorites-btn {
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%) scale(1);
-  }
 }
