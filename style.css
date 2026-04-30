@@ -6,9 +6,10 @@ body {
   margin: 0;
 }
 
-/* ---------------- HEADER ---------------- */
+/* HEADER */
 header {
   display: flex;
+  justify-content: flex-end; /* keeps search/filter on right */
   align-items: center;
   padding: 10px 20px;
   position: relative;
@@ -16,9 +17,10 @@ header {
 
 /* CENTERED TITLE */
 header h1 {
-  flex: 1;                 /* take available space */
-  text-align: center;       /* center text horizontally */
-  margin: 0;               /* remove default margin */
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
   color: #e50914;
   z-index: 1;
 }
