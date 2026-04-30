@@ -30,29 +30,29 @@ header div {
   display: flex;
   gap: 10px;
   justify-content: flex-end;
-  z-index: 2; /* above the title if needed */
+  z-index: 2;
 }
 
 /* RESPONSIVE HEADER */
 @media (max-width: 500px) {
   header {
-    flex-direction: column; /* stack items vertically */
+    flex-direction: column;
     justify-content: center;
     gap: 10px;
   }
 
   header h1 {
-    position: static;  /* remove absolute for stacking */
+    position: static;
     transform: none;
   }
 
   header div {
-    justify-content: center; /* center search/filter */
+    justify-content: center;
     width: 100%;
   }
 
   #search-bar, #genre-filter {
-    width: 45%; /* smaller inputs on mobile */
+    width: 45%;
   }
 }
 
@@ -252,4 +252,13 @@ header div {
 #toggle-favorites-btn:hover {
   background: #ff1c1c;
   transform: scale(1.05);
+}
+
+/* Move button lower on mobile to avoid overlap */
+@media (max-width: 500px) {
+  #toggle-favorites-btn {
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%) scale(1);
+  }
 }
