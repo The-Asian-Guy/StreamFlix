@@ -23,28 +23,24 @@ function fetchGenres() {
 /* ---------------- FAVORITES ---------------- */
 function getFavorites() { return JSON.parse(localStorage.getItem('favorites')) || []; }
 function isFavorite(id) { return getFavorites().includes(id); }
+
 function toggleFavorite(id) {
   let favorites = getFavorites();
-
-  // Add or remove from favorites
   if (favorites.includes(id)) {
     favorites = favorites.filter(favId => favId !== id);
   } else {
     favorites.push(id);
   }
-
-  // Save updated favorites
   localStorage.setItem('favorites', JSON.stringify(favorites));
 
   // Update favorites row
   renderFavorites();
 
-  // Update heart buttons in all movie rows
+  // Update all heart buttons
   $('.fav-btn').each(function () {
     const btnId = $(this).data('id');
     $(this).text(favorites.includes(btnId) ? '❤️' : '🤍');
   });
-}erFavorites();
 }
 
 /* ---------------- GENERIC ROW CREATOR ---------------- */
@@ -86,7 +82,6 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
   row.find('.fav-btn').click(function () {
     const id = $(this).data('id');
     toggleFavorite(id);
-    $(this).text(isFavorite(id) ? '❤️' : '🤍');
   });
 
   row.find('.left').click(() => grid.scrollBy({ left: -300, behavior: 'smooth' }));
@@ -106,7 +101,6 @@ function renderFavorites() {
     return;
   }
 
-  // Fetch all favorite movies in parallel
   const requests = favIds.map(id =>
     fetch(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`).then(res => res.json())
   );
