@@ -1,4 +1,4 @@
-/* GENERAL STYLES */
+/* ---------------- GENERAL STYLES ---------------- */
 body {
   background: #141414;
   color: white;
@@ -6,17 +6,53 @@ body {
   margin: 0;
 }
 
+/* ---------------- HEADER ---------------- */
 header {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   padding: 10px 20px;
+  position: relative;
 }
 
-h1 {
+/* CENTERED TITLE */
+header h1 {
+  flex: 1;                 /* take available space */
+  text-align: center;       /* center text horizontally */
+  margin: 0;               /* remove default margin */
   color: #e50914;
+  z-index: 1;
 }
 
-/* MOVIE ROW */
+/* SEARCH & GENRE FILTER ON RIGHT */
+header div {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end; /* move to right */
+  flex: 1;                   /* share header space with title */
+}
+
+/* RESPONSIVE HEADER */
+@media (max-width: 500px) {
+  header {
+    flex-direction: column; /* stack title and search/filter */
+    align-items: center;
+  }
+
+  header h1 {
+    margin-bottom: 10px;
+  }
+
+  header div {
+    justify-content: center; /* center search/filter on mobile */
+    width: 100%;
+  }
+
+  #search-bar, #genre-filter {
+    width: 45%; /* adjust input width for mobile */
+  }
+}
+
+/* ---------------- MOVIE ROW ---------------- */
 .movie-row {
   position: relative;
   padding: 0 40px;
@@ -52,6 +88,7 @@ h1 {
   display: block;
   width: 100%;
   border-radius: 5px;
+  cursor: pointer; /* added for clarity that poster is clickable */
 }
 
 .poster-container .fav-btn {
@@ -73,7 +110,7 @@ h1 {
   transform: scale(1.3);
 }
 
-/* SCROLL ARROWS */
+/* ---------------- SCROLL ARROWS ---------------- */
 .scroll-arrow {
   position: absolute;
   top: 50%;
@@ -96,7 +133,7 @@ h1 {
 .left { left: 0; }
 .right { right: 0; }
 
-/* MODAL */
+/* ---------------- MODAL ---------------- */
 #movie-modal {
   display: none;
   position: fixed;
@@ -130,6 +167,9 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(229, 9, 20, 0.8) rgba(28, 28, 28, 0.6);
 }
 
 #movie-modal img {
@@ -158,7 +198,6 @@ h1 {
   cursor: pointer;
 }
 
-/* THEME-ALIGNED SCROLLBAR */
 #movie-modal .modal-content::-webkit-scrollbar {
   width: 6px;
 }
@@ -177,13 +216,6 @@ h1 {
   background-color: rgba(229, 9, 20, 1);
 }
 
-/* Firefox scrollbar */
-#movie-modal .modal-content {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(229, 9, 20, 0.8) rgba(28, 28, 28, 0.6);
-}
-
-/* RESPONSIVE MODAL */
 @media (max-width: 500px) {
   #movie-modal .modal-content {
     padding: 15px;
@@ -196,7 +228,7 @@ h1 {
   }
 }
 
-/* FLOATING FAVORITES BUTTON */
+/* ---------------- FLOATING FAVORITES BUTTON ---------------- */
 #toggle-favorites-btn {
   position: fixed;
   top: 20px;
