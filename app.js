@@ -169,7 +169,7 @@ $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-moda
 $('#toggle-favorites-btn').click(() => {
   favoritesVisible = !favoritesVisible;
 
-  renderFavorites(); // ensure favorites are loaded
+  renderFavorites();
 
   if (favoritesVisible) {
     $('#favorites-container').slideDown();
@@ -187,7 +187,6 @@ $(document).ready(() => {
   categories.forEach(c => fetchMovies(c.endpoint, c.title));
   renderFavorites();
 
-  // Set correct initial button text
   if ($('#favorites-container').children().length > 0) {
     $('#toggle-favorites-btn').text('Hide Favorites');
     favoritesVisible = true;
