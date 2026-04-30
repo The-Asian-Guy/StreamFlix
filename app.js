@@ -179,8 +179,17 @@ $('#toggle-favorites-btn').click(() => {
 
 /* ---------------- INIT ---------------- */
 $(document).ready(() => {
-  $('#movie-modal').hide(); // prevent empty modal flash
+  $('#movie-modal').hide();
   fetchGenres();
   categories.forEach(c => fetchMovies(c.endpoint, c.title));
   renderFavorites();
+
+  // Set correct initial button text
+  if ($('#favorites-container').children().length > 0) {
+    $('#toggle-favorites-btn').text('Hide Favorites');
+    favoritesVisible = true;
+  } else {
+    $('#toggle-favorites-btn').text('Show Favorites');
+    favoritesVisible = false;
+  }
 });
