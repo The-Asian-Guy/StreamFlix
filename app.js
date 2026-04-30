@@ -24,7 +24,7 @@ function fetchGenres() {
 
 /* ---------------- FAVORITES ---------------- */
 function getFavorites() {
-  return JSON.parse(localStorage.getItem('favorites')) || [];
+  return JSON.parse(localStorage.getItem('favorites'))?.map(Number) || [];
 }
 
 function isFavorite(id) {
@@ -34,8 +34,11 @@ function isFavorite(id) {
 function toggleFavorite(id) {
   let favorites = getFavorites();
   id = Number(id);
-  if (favorites.includes(id)) favorites = favorites.filter(favId => favId !== id);
-  else favorites.push(id);
+  if (favorites.includes(id)) {
+    favorites = favorites.filter(favId => favId !== id);
+  } else {
+    favorites.push(id);
+  }
   localStorage.setItem('favorites', JSON.stringify(favorites));
   renderFavorites();
 }
@@ -88,7 +91,7 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
 
 /* ---------------- RENDER FAVORITES ---------------- */
 function renderFavorites() {
-  const favIds = getFavorites().map(Number); // ensure all IDs are numbers
+  const favIds = getFavorites();
   const container = $('#favorites-container');
   container.empty();
 
@@ -102,6 +105,7 @@ function renderFavorites() {
   $.when(...requests).done((...results) => {
     const movies = results.map(r => Array.isArray(r) ? r[0] : r);
     createMovieRow({ title: "Favorites", movies, container: '#favorites-container', hearts: true });
+
     if (!favoritesVisible) container.hide();
     else container.show();
   });
