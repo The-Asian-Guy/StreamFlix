@@ -12,7 +12,7 @@ let genresList = [];
 let isModalLoading = false;
 let favoritesVisible = true;
 
-/* ---------------- GENRES ---------------- */
+/* GENRES */
 function fetchGenres() {
   $.get(`${BASE_URL}/genre/movie/list?api_key=${API_KEY}`, data => {
     genresList = data.genres;
@@ -22,7 +22,7 @@ function fetchGenres() {
   });
 }
 
-/* ---------------- FAVORITES ---------------- */
+/* FAVORITES */
 function getFavorites() {
   return JSON.parse(localStorage.getItem('favorites'))?.map(Number).filter(id => id > 0) || [];
 }
@@ -44,15 +44,15 @@ function toggleFavorite(id) {
 
   localStorage.setItem('favorites', JSON.stringify(favorites));
   renderFavorites();
-  updateHeartButton(id); // instantly update the heart icon
+  updateHeartButton(id);
 }
 
-/* ---------------- UPDATE HEART ICON ---------------- */
+/* UPDATE HEART ICON */
 function updateHeartButton(id) {
   $(`.fav-btn[data-id='${id}']`).text(isFavorite(id) ? '❤️' : '🤍');
 }
 
-/* ---------------- GENERIC ROW CREATOR ---------------- */
+/* GENERIC ROW CREATOR */
 function createMovieRow({ title, movies, container = '#movie-container', hideArrows = false, hearts = true }) {
   const row = $(`
     <section class="movie-row">
@@ -97,7 +97,7 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
   return row;
 }
 
-/* ---------------- RENDER FAVORITES ---------------- */
+/* RENDER FAVORITES */
 function renderFavorites() {
   const favIds = getFavorites();
   const container = $('#favorites-container');
@@ -119,14 +119,14 @@ function renderFavorites() {
   });
 }
 
-/* ---------------- FETCH MOVIES ---------------- */
+/* FETCH MOVIES */
 function fetchMovies(endpoint, title) {
   $.get(`${BASE_URL}${endpoint}?api_key=${API_KEY}`, data => {
     createMovieRow({ title, movies: data.results.slice(0, 10) });
   });
 }
 
-/* ---------------- SEARCH ---------------- */
+/* SEARCH */
 $('#search-bar').on('input', function () {
   const q = $(this).val();
   $('#movie-container').empty();
@@ -143,7 +143,7 @@ $('#search-bar').on('input', function () {
   });
 });
 
-/* ---------------- GENRE FILTER ---------------- */
+/* GENRE FILTER */
 $('#genre-filter').on('change', function () {
   const genreId = $(this).val();
   $('#movie-container').empty();
@@ -161,7 +161,7 @@ $('#genre-filter').on('change', function () {
   });
 });
 
-/* ---------------- DETAILS ---------------- */
+/* DETAILS */
 function viewDetails(id) {
   if (isModalLoading) return;
   isModalLoading = true;
@@ -185,11 +185,11 @@ function viewDetails(id) {
     .always(() => { isModalLoading = false; });
 }
 
-/* ---------------- CLOSE MODAL ---------------- */
+/* CLOSE MODAL */
 $('.close').click(() => $('#movie-modal').fadeOut());
 $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-modal').fadeOut(); });
 
-/* ---------------- TOGGLE FAVORITES BUTTON ---------------- */
+/* TOGGLE FAVORITES BUTTON */
 $('#toggle-favorites-btn').click(() => {
   favoritesVisible = !favoritesVisible;
 
@@ -202,7 +202,7 @@ $('#toggle-favorites-btn').click(() => {
   }
 });
 
-/* ---------------- INIT ---------------- */
+/* INIT */
 $(document).ready(() => {
   $('#movie-modal').hide();
   fetchGenres();
