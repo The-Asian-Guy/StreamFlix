@@ -6,7 +6,7 @@ body {
   margin: 0;
 }
 
-/* HEADER */
+/* HEADER FIXED */
 header {
   position: fixed;
   top: 0;
@@ -21,14 +21,28 @@ header {
   box-shadow: 0 2px 5px rgba(0,0,0,0.5);
 }
 
-/* Search + genre filter */
-header .search-genre {
+/* Three header sections */
+.header-left, .header-center, .header-right {
   display: flex;
-  gap: 10px;
   align-items: center;
 }
 
-/* Padding for header */
+/* Center title */
+.header-center {
+  flex: 1;
+  justify-content: center;
+}
+
+.header-center h1 {
+  margin: 0;
+  color: #e50914;
+}
+
+/* Left and right spacing */
+.header-left { flex: 0; }
+.header-right { flex: 0; display: flex; gap: 10px; align-items: center; }
+
+/* Main content padding for fixed header */
 main {
   padding-top: 80px;
 }
