@@ -8,7 +8,7 @@ body {
 
 header {
   display: flex;
-  justify-content: center; /* center the title */
+  justify-content: center; /* keep title centered */
   align-items: center;
   padding: 10px 20px;
   position: relative;
@@ -25,18 +25,17 @@ header h1 {
 /* SEARCH AND FILTER CONTAINER */
 header > div {
   position: absolute;
-  left: 20px; /* align to left */
+  right: 20px; /* moved to right */
   display: flex;
   gap: 10px;
 }
 
-#search-bar {
+#search-bar, #genre-filter {
   padding: 5px 10px;
   border-radius: 5px;
   border: none;
   font-size: 14px;
 }
-
 #genre-filter {
   padding: 5px 10px;
   border-radius: 5px;
