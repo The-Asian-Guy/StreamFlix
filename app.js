@@ -32,13 +32,16 @@ function isFavorite(id) {
 }
 
 function toggleFavorite(id) {
-  let favorites = getFavorites();
   id = Number(id);
+  if (!id) return; // skip invalid IDs
+
+  let favorites = getFavorites();
   if (favorites.includes(id)) {
     favorites = favorites.filter(favId => favId !== id);
   } else {
     favorites.push(id);
   }
+
   localStorage.setItem('favorites', JSON.stringify(favorites));
   renderFavorites();
 }
@@ -62,7 +65,7 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
   movies.forEach(movie => {
     if (!movie.poster_path) return;
     const favHeart = hearts ? (isFavorite(movie.id) ? '❤️' : '🤍') : '';
-    const heartButton = hearts ? `<button class="fav-btn" data-id="${movie.id}">${favHeart}</button>` : '';
+    const heartButton = hearts ? `<button class="fav-btn" data-id="${movie.id || 0}">${favHeart}</button>` : '';
 
     row.find('.movie-grid').append(`
       <div class="movie-item">
@@ -91,7 +94,7 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
 
 /* ---------------- RENDER FAVORITES ---------------- */
 function renderFavorites() {
-  const favIds = getFavorites();
+  const favIds = getFavorites().filter(id => id > 0); // remove invalid IDs
   const container = $('#favorites-container');
   container.empty();
 
