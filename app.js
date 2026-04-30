@@ -168,11 +168,14 @@ $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-moda
 /* ---------------- TOGGLE FAVORITES ---------------- */
 $('#toggle-favorites-btn').click(() => {
   favoritesVisible = !favoritesVisible;
+
+  renderFavorites(); // ensure favorites are loaded
+
   if (favoritesVisible) {
-    $('#favorites-container').show();
+    $('#favorites-container').slideDown();
     $('#toggle-favorites-btn').text('Hide Favorites');
   } else {
-    $('#favorites-container').hide();
+    $('#favorites-container').slideUp();
     $('#toggle-favorites-btn').text('Show Favorites');
   }
 });
