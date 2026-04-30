@@ -47,7 +47,6 @@ function toggleFavorite(id) {
   updateHeartButton(id);
 }
 
-/* UPDATE HEART ICON */
 function updateHeartButton(id) {
   $(`.fav-btn[data-id='${id}']`).text(isFavorite(id) ? '❤️' : '🤍');
 }
@@ -71,7 +70,7 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
   movies.forEach(movie => {
     if (!movie.poster_path) return;
     const favHeart = hearts ? (isFavorite(movie.id) ? '❤️' : '🤍') : '';
-    const heartButton = hearts ? `<button class="fav-btn" data-id="${movie.id || 0}">${favHeart}</button>` : '';
+    const heartButton = hearts ? `<button class="fav-btn" data-id="${movie.id}">${favHeart}</button>` : '';
 
     row.find('.movie-grid').append(`
       <div class="movie-item">
@@ -85,11 +84,7 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
   });
 
   row.find('.movie-poster').click(function () { viewDetails($(this).data('id')); });
-
-  row.find('.fav-btn').click(function () {
-    const id = $(this).data('id');
-    toggleFavorite(id);
-  });
+  row.find('.fav-btn').click(function () { toggleFavorite($(this).data('id')); });
 
   row.find('.left').click(() => grid.scrollBy({ left: -300, behavior: 'smooth' }));
   row.find('.right').click(() => grid.scrollBy({ left: 300, behavior: 'smooth' }));
@@ -103,19 +98,13 @@ function renderFavorites() {
   const container = $('#favorites-container');
   container.empty();
 
-  if (favIds.length === 0) {
-    container.hide();
-    return;
-  }
+  if (!favIds.length) return;
 
   const requests = favIds.map(id => $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`));
-
   $.when(...requests).done((...results) => {
-    const movies = results.map(r => Array.isArray(r) ? r[0] : r);
+    const movies = results.map(r => r[0] || r);
     createMovieRow({ title: "Favorites", movies, container: '#favorites-container', hearts: true });
-
     if (!favoritesVisible) container.hide();
-    else container.show();
   });
 }
 
@@ -189,12 +178,14 @@ function viewDetails(id) {
 $('.close').click(() => $('#movie-modal').fadeOut());
 $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-modal').fadeOut(); });
 
-/* TOGGLE FAVORITES BUTTON */
+/* TOGGLE FAVORITES */
 $('#toggle-favorites-btn').click(() => {
   favoritesVisible = !favoritesVisible;
 
   if (favoritesVisible) {
-    $('#favorites-container').slideDown();
+    $('#favorites-container').slideDown(() => {
+      document.querySelector('#favorites-container').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
     $('#toggle-favorites-btn').text('Hide Favorites').addClass('active');
   } else {
     $('#favorites-container').slideUp();
