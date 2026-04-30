@@ -180,12 +180,13 @@ $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-moda
 /* ---------------- TOGGLE FAVORITES ---------------- */
 $('#toggle-favorites-btn').click(() => {
   favoritesVisible = !favoritesVisible;
+
   if (favoritesVisible) {
     $('#favorites-container').slideDown();
-    $('#toggle-favorites-btn').text('Hide Favorites');
+    $('#toggle-favorites-btn').text('Hide Favorites').addClass('active');
   } else {
     $('#favorites-container').slideUp();
-    $('#toggle-favorites-btn').text('Show Favorites');
+    $('#toggle-favorites-btn').text('Show Favorites').removeClass('active');
   }
 });
 
