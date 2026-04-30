@@ -23,10 +23,17 @@ function fetchGenres() {
 }
 
 /* ---------------- FAVORITES ---------------- */
-function getFavorites() { return JSON.parse(localStorage.getItem('favorites')) || []; }
-function isFavorite(id) { return getFavorites().includes(id); }
+function getFavorites() {
+  return JSON.parse(localStorage.getItem('favorites')) || [];
+}
+
+function isFavorite(id) {
+  return getFavorites().includes(Number(id));
+}
+
 function toggleFavorite(id) {
   let favorites = getFavorites();
+  id = Number(id);
   if (favorites.includes(id)) favorites = favorites.filter(favId => favId !== id);
   else favorites.push(id);
   localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -81,17 +88,22 @@ function createMovieRow({ title, movies, container = '#movie-container', hideArr
 
 /* ---------------- RENDER FAVORITES ---------------- */
 function renderFavorites() {
-  const favIds = getFavorites();
+  const favIds = getFavorites().map(Number); // ensure all IDs are numbers
   const container = $('#favorites-container');
   container.empty();
 
-  if (favIds.length === 0) return;
+  if (favIds.length === 0) {
+    container.hide();
+    return;
+  }
 
   const requests = favIds.map(id => $.get(`${BASE_URL}/movie/${id}?api_key=${API_KEY}`));
+
   $.when(...requests).done((...results) => {
-    const movies = results.map(r => r[0] || r);
+    const movies = results.map(r => Array.isArray(r) ? r[0] : r);
     createMovieRow({ title: "Favorites", movies, container: '#favorites-container', hearts: true });
-    if (!favoritesVisible) $('#favorites-container').hide();
+    if (!favoritesVisible) container.hide();
+    else container.show();
   });
 }
 
@@ -168,9 +180,6 @@ $('#movie-modal').click(e => { if (e.target.id === 'movie-modal') $('#movie-moda
 /* ---------------- TOGGLE FAVORITES ---------------- */
 $('#toggle-favorites-btn').click(() => {
   favoritesVisible = !favoritesVisible;
-
-  renderFavorites();
-
   if (favoritesVisible) {
     $('#favorites-container').slideDown();
     $('#toggle-favorites-btn').text('Hide Favorites');
@@ -186,12 +195,4 @@ $(document).ready(() => {
   fetchGenres();
   categories.forEach(c => fetchMovies(c.endpoint, c.title));
   renderFavorites();
-
-  if ($('#favorites-container').children().length > 0) {
-    $('#toggle-favorites-btn').text('Hide Favorites');
-    favoritesVisible = true;
-  } else {
-    $('#toggle-favorites-btn').text('Show Favorites');
-    favoritesVisible = false;
-  }
 });
