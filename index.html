@@ -9,12 +9,9 @@
 </head>
 <body>
 
-<!-- Floating toggle favorites button -->
-<button id="toggle-favorites-btn">Show Favorites</button>
-
 <header>
-  <h1>StreamFlix</h1>
-  <div>
+  <button id="toggle-favorites-btn">Show Favorites</button>
+  <div class="search-genre">
     <input type="text" id="search-bar" placeholder="Search Movies">
     <select id="genre-filter">
       <option value="">All Genres</option>
@@ -30,7 +27,7 @@
   <section id="movie-container"></section>
 </main>
 
-<!-- Modal -->
+<!-- Modal for movie details -->
 <div id="movie-modal">
   <div class="modal-content">
     <span class="close">&times;</span>
