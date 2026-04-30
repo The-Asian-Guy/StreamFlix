@@ -6,13 +6,13 @@ body {
   margin: 0;
 }
 
-/* HEADER */
+/* ---------------- HEADER ---------------- */
 header {
   display: flex;
-  justify-content: flex-end; /* keeps search/filter on right */
+  justify-content: flex-end; /* search/filter on right */
   align-items: center;
   padding: 10px 20px;
-  position: relative;
+  position: relative; /* needed for absolute positioning of title */
 }
 
 /* CENTERED TITLE */
@@ -25,32 +25,34 @@ header h1 {
   z-index: 1;
 }
 
-/* SEARCH & GENRE FILTER ON RIGHT */
+/* SEARCH & GENRE FILTER */
 header div {
   display: flex;
   gap: 10px;
-  justify-content: flex-end; /* move to right */
-  flex: 1;                   /* share header space with title */
+  justify-content: flex-end;
+  z-index: 2; /* above the title if needed */
 }
 
 /* RESPONSIVE HEADER */
 @media (max-width: 500px) {
   header {
-    flex-direction: column; /* stack title and search/filter */
-    align-items: center;
+    flex-direction: column; /* stack items vertically */
+    justify-content: center;
+    gap: 10px;
   }
 
   header h1 {
-    margin-bottom: 10px;
+    position: static;  /* remove absolute for stacking */
+    transform: none;
   }
 
   header div {
-    justify-content: center; /* center search/filter on mobile */
+    justify-content: center; /* center search/filter */
     width: 100%;
   }
 
   #search-bar, #genre-filter {
-    width: 45%; /* adjust input width for mobile */
+    width: 45%; /* smaller inputs on mobile */
   }
 }
 
@@ -90,7 +92,7 @@ header div {
   display: block;
   width: 100%;
   border-radius: 5px;
-  cursor: pointer; /* added for clarity that poster is clickable */
+  cursor: pointer;
 }
 
 .poster-container .fav-btn {
